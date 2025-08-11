@@ -1,0 +1,14 @@
+[project]
+name = "prototype"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "html-page-generator",
+    "pydantic>=2.11.7",
+    "pydantic-settings>=2.10.1",
+]
+
+[tool.uv.sources]
+html-page-generator = { git = "https://github.com/devmanorg/html-page-generator.git" }
