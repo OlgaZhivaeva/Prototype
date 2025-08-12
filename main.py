@@ -13,8 +13,8 @@ DEBUG_MODE = os.getenv("DEBUG_MODE", False)
 
 async def main():
     async with (
-        AsyncUnsplashClient.setup("UNSPLASH_CLIENT_ID", timeout=3),
-        AsyncDeepseekClient.setup("DEEPSEEK_API_KEY", "DEEPSEEK_BASE_URL")
+        AsyncUnsplashClient.setup(unsplash_client_id, timeout=3),
+        AsyncDeepseekClient.setup(deep_seek_api_key, deepseek_base_url)
     ):
         async def generate_page(user_prompt: str):
             generator = AsyncPageGenerator(debug_mode=DEBUG_MODE)
@@ -44,7 +44,7 @@ if __name__ == "__main__":
         deep_seek_max_connections: Annotated[conint(gt=0), "Максимальное количество подключений"] | None = None
         unsplash_max_connections: Annotated[conint(gt=0), "Максимальное количество подключений"] | None = None
         timeout: Annotated[conint(gt=0), "Таймаут"] | None = None
-        deepseek_base_url: AnyHttpUrl
+        deepseek_base_url: str
         model_config = SettingsConfigDict(
             env_file=".env",
             env_file_encoding="utf-8",
@@ -58,6 +58,10 @@ if __name__ == "__main__":
 
     settings_json_format = settings.model_dump_json(indent=4)
     print(settings_json_format)
+
+    unsplash_client_id = settings.unsplash_client_id
+    deep_seek_api_key = settings.deep_seek_api_key
+    deepseek_base_url = settings.deepseek_base_url
 
     asyncio.run(main())
 
