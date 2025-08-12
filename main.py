@@ -8,7 +8,7 @@ from html_page_generator import AsyncDeepseekClient, AsyncUnsplashClient
 
 from html_page_generator import AsyncPageGenerator
 
-DEBUG_MODE = os.getenv("DEBUG_MODE", False)
+# DEBUG_MODE = os.getenv("DEBUG_MODE", False)
 
 
 async def main():
@@ -17,7 +17,7 @@ async def main():
         AsyncDeepseekClient.setup(deep_seek_api_key, deepseek_base_url)
     ):
         async def generate_page(user_prompt: str):
-            generator = AsyncPageGenerator(debug_mode=DEBUG_MODE)
+            generator = AsyncPageGenerator(debug_mode=debug_mode)
             title_saved = False
             async for chunk in generator(user_prompt):
                 if title_saved:
@@ -38,7 +38,7 @@ async def main():
 if __name__ == "__main__":
     class AppSettings(BaseSettings):
         """Главные настройки приложения. Загружаются из .env."""
-        debug: bool = False
+        debug_mode: bool = False
         deep_seek_api_key: SecretStr
         unsplash_client_id: SecretStr
         deep_seek_max_connections: Annotated[conint(gt=0), "Максимальное количество подключений"] | None = None
@@ -62,6 +62,7 @@ if __name__ == "__main__":
     unsplash_client_id = settings.unsplash_client_id
     deep_seek_api_key = settings.deep_seek_api_key
     deepseek_base_url = settings.deepseek_base_url
+    debug_mode = settings.debug_mode
 
     asyncio.run(main())
 
